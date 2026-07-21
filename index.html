@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dataset Examples — Supplementary Material</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAF8;
+            --surface: #FFFFFF;
+            --border: #E8E6E1;
+            --border-hover: #D0CDC6;
+            --text-primary: #1A1A18;
+            --text-secondary: #6B6860;
+            --text-tertiary: #9E9B93;
+            --accent: #2D5A3D;
+            --accent-light: #E8F0EB;
+            --question-bg: #F0F4F8;
+            --question-border: #C8D6E0;
+            --answer-bg: #F0F8F2;
+            --answer-border: #B8D4C0;
+            --reasoning-bg: #FFF9EE;
+            --reasoning-border: #E8D08C;
+            --tag-bg: #F2F1EE;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px 40px;
+        }
+
+        .header p.label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .header h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 640px;
+            line-height: 1.7;
+        }
+
+        .stats-bar {
+            max-width: 1200px;
+            margin: 0 auto 32px;
+            padding: 0 24px;
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .stat { display: flex; align-items: baseline; gap: 8px; }
+
+        .stat-value {
+            font-family: 'Source Serif 4', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label { font-size: 13px; color: var(--text-tertiary); }
+
+        /* ---- Subtitle above pills ---- */
+        .type-nav-label {
+            max-width: 1200px;
+            margin: 0 auto 10px;
+            padding: 0 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-tertiary);
+        }
+
+        /* ---- Pill Navigation (wrapping) ---- */
+        .type-nav {
+            max-width: 1200px;
+            margin: 0 auto 20px;
+            padding: 0 24px;
+        }
+
+        .type-nav-scroll { overflow: visible; }
+
+        .type-nav-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-bottom: 12px;
+        }
+
+        .type-btn {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14.5px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .type-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--accent);
+            background: var(--accent-light);
+            box-shadow: 0 2px 8px rgba(45, 90, 61, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .type-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 3px 12px rgba(45, 90, 61, 0.18);
+        }
+
+        .type-btn .count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            opacity: 0.65;
+            margin-left: 6px;
+        }
+
+        /* ---- 2x2 Grid Cards ---- */
+        .examples-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px 80px;
+        }
+
+        .type-section { display: none; }
+        .type-section.active { display: block; }
+
+        .type-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .example-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .example-card:hover { box-shadow: var(--shadow-md); }
+
+        .card-header {
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .card-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        .card-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-tertiary);
+            background: var(--tag-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .card-tag {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 10px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .card-tag.specialty { background: #EDE8F5; color: #5B4A8A; }
+        .card-tag.procedure { background: #E3EFF8; color: #3A6A8A; }
+
+        .card-body { padding: 14px 16px; flex: 1; }
+
+        .video-wrapper {
+            margin-bottom: 12px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            display: block;
+            max-height: 220px;
+            object-fit: contain;
+        }
+
+        /* ---- QA Blocks ---- */
+        .qa-block {
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            margin-bottom: 10px;
+        }
+        .qa-block:last-child { margin-bottom: 0; }
+
+        .qa-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .qa-block.question { background: var(--question-bg); border-left: 3px solid var(--question-border); }
+        .qa-block.question .qa-label { color: #4A6F8A; }
+
+        .qa-block.answer { background: var(--answer-bg); border-left: 3px solid var(--answer-border); }
+        .qa-block.answer .qa-label { color: var(--accent); }
+
+        .qa-block.reasoning { background: var(--reasoning-bg); border-left: 3px solid var(--reasoning-border); }
+        .qa-block.reasoning .qa-label { color: #9A7B2E; }
+
+        .qa-text { font-size: 13px; line-height: 1.6; color: var(--text-primary); }
+
+        /* ---- Two-column options ---- */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 16px;
+            margin-top: 10px;
+        }
+
+        .option-item {
+            font-size: 12.5px;
+            padding: 5px 8px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.5);
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .option-item.correct {
+            color: var(--accent);
+            font-weight: 600;
+            background: rgba(45, 90, 61, 0.08);
+        }
+
+        .option-letter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
+            width: 18px;
+        }
+
+        .option-check {
+            margin-left: auto;
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+
+        /* ---- Transcript toggle ---- */
+        .transcript-toggle {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 5px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .transcript-toggle:hover { border-color: var(--border-hover); color: var(--text-primary); }
+
+        .transcript-content {
+            display: none;
+            margin-top: 8px;
+            padding: 10px 14px;
+            background: var(--bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .transcript-content.open { display: block; }
+
+        .transcript-ts {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-tertiary);
+        }
+
+        .footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer p { font-size: 13px; color: var(--text-tertiary); }
+
+        @media (max-width: 800px) {
+            .header { padding: 40px 16px 24px; }
+            .stats-bar { padding: 0 16px; gap: 20px; }
+            .type-nav { padding: 0 16px; }
+            .examples-container { padding: 16px 16px 60px; }
+            .examples-grid { grid-template-columns: 1fr; }
+            .card-body { padding: 12px; }
+            .options-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>SUREON Dataset: Qualitative Examples</h1>
+        <p class="subtitle">
+            Representative examples from the SUREON dataset, organized by question type.
+        </p>
+    </header>
+
+    <div class="stats-bar">
+        <div class="stat">
+            <span class="stat-value" id="stat-examples">&mdash;</span>
+            <span class="stat-label">examples shown</span>
+        </div>
+        <div class="stat">
+            <span class="stat-value" id="stat-types">&mdash;</span>
+            <span class="stat-label">question types</span>
+        </div>
+    </div>
+
+    <div class="type-nav-label">Question-Answer Pair Types</div>
+    <nav class="type-nav" id="type-nav">
+        <div class="type-nav-scroll" id="type-nav-scroll">
+            <div class="type-nav-inner" id="type-tabs"></div>
+        </div>
+    </nav>
+
+    <div class="examples-container" id="examples-root"></div>
+
+    <script>
+    const DATA = {
+        "Local Action Reasoning": {
+            description: "Questions about the rationale behind specific localized actions performed by the surgeon.",
+            examples: [
+                {
+                    video: "videos/25d2fa5da69936e58957cd1db73aee05_local_action_reasoning_00-01-14_201_00-01-18.743.mp4",
+                    time_window: "00:01:14,201 → 00:01:18.743",
+                    specialty: "General Surgery",
+                    procedure: "Pancreatoduodenectomy",
+                    question: "Why are the staples closing the pancreatic duct carefully removed here?",
+                    answer: "To expose the full circumference of the pancreatic duct before starting the anastomosis",
+                    options: [{ letter: "A", text: "To allow access for the pancreaticojejunostomy sutures", correct: false }, { letter: "B", text: "To facilitate the anastomosis of the jejunum to the pancreatic head", correct: false }, { letter: "C", text: "To avoid incorporating pancreatic tissue into the suture line", correct: false }, { letter: "D", text: "To expose the full circumference of the pancreatic duct before starting the anastomosis", correct: true }, { letter: "E", text: "To prevent thermal injury to the portal vein and the confluence", correct: false }, { letter: "F", text: "To ensure adequate mobilization of the posterior wall of the pancreas", correct: false }, { letter: "G", text: "To ensure the stent is secured within the duct", correct: false }],
+                    transcript: "[0:01:14 → 0:01:17] Then very carefully removing all the staples that are closing it.\n[0:01:18 → 0:01:27] And as you can see in the next still, we\'re going to see the full circumference of the pancreatic duct before starting any anastomosis."
+                },
+{
+                    video: "videos/Xz1YmtIpvEE_local_action_reasoning_00-14-38.64_00-14-46.03.mp4",
+                    time_window: "00:14:38.64 → 00:14:46.03",
+                    specialty: "General Surgery",
+                    procedure: "Common Bile Duct Exploration",
+                    question: "Why is glucagon administered at this moment?",
+                    answer: "To dilate the sphincter of Oddi",
+                    options: [{ letter: "A", text: "To facilitate the insertion of the choledochoscope", correct: false }, { letter: "B", text: "To dilate the sphincter of Oddi", correct: true }, { letter: "C", text: "To allow for a cholangiogram", correct: false }, { letter: "D", text: "To secure hemostasis now since exposure will be limited after the gallbladder is disengaged", correct: false }, { letter: "E", text: "To stiffen the catheter so it passes the cystic duct more easily", correct: false }, { letter: "F", text: "To prevent vomiting during the procedure", correct: false }, { letter: "G", text: "To allow better access to the cystic duct", correct: false }],
+                    transcript: "[0:14:38 → 0:14:46] Anesthesia are also instructed to give the patient one milligram of glucagon to dilate the sphincter of Oddi."
+                },
+{
+                    video: "videos/9cbb09f2d5fd9c95fc23f2ac23b15b50_local_action_reasoning_00-09-10_365_00-09-16.070.mp4",
+                    time_window: "00:09:10,365 → 00:09:16.070",
+                    specialty: "Colorectal",
+                    procedure: "Low Anterior Resection (LAR)",
+                    question: "What is the immediate purpose of injecting indocyanine green now?",
+                    answer: "To check vascularization of the proposed proximal end",
+                    options: [{ letter: "A", text: "To evaluate the viability of the sigmoid colon", correct: false }, { letter: "B", text: "To visualize the inferior mesenteric artery", correct: false }, { letter: "C", text: "To check vascularization of the proposed proximal end", correct: true }, { letter: "D", text: "To check for any occult bleeding in the pelvis", correct: false }, { letter: "E", text: "To look for green fluorescence inside the bladder to determine if it was inadvertently entered", correct: false }, { letter: "F", text: "To allow complete intra-abdominal visualization", correct: false }, { letter: "G", text: "To visualize the mesenteric vessels supplying the colon", correct: false }],
+                    transcript: "[0:09:10 → 0:09:15] The vascularization of the proposed proximal end was checked by indocyanine green.\n[0:09:16 → 0:09:19] The stapler port was then extended to eight centimeters and the specimen was"
+                },
+{
+                    video: "videos/feilm-ch62c_local_action_reasoning_00-01-36.47_00-01-50.14.mp4",
+                    time_window: "00:01:36.47 → 00:01:50.14",
+                    specialty: "General Surgery",
+                    procedure: "Ventral Hernia TAR",
+                    question: "Why is a quick crossover with retromuscular dissection performed at this point?",
+                    answer: "To avoid compromising visualization after entering the peritoneal cavity",
+                    options: [{ letter: "A", text: "To avoid compromising visualization after entering the peritoneal cavity", correct: true }, { letter: "B", text: "Because the dissection overlies the inferior epigastric vessels", correct: false }, { letter: "C", text: "To avoid potential injury to the inferior epigastric vessels", correct: false }, { letter: "D", text: "To minimize the risk of thermal injury to adjacent structures", correct: false }, { letter: "E", text: "Because dissection is occurring close to major vascular structures", correct: false }, { letter: "F", text: "To ensure the dissection remains in the correct retro-rectus plane", correct: false }, { letter: "G", text: "To ensure the dissection plane is consistently maintained", correct: false }],
+                    transcript: "[0:01:36 → 0:01:50] Again, because we entered the peritoneal cavity, I did not want to compromise our visualization, so quickly worked on a crossover and developed that retromuscular dissection as we usually do."
+                }
+            ]
+        },
+
+        "Temporal Ordering": {
+            description: "Questions about the chronological ordering and timing of surgical events.",
+            examples: [
+                {
+                    video: "videos/BvutK-6q5BI_temporal_ordering_00-01-23.54_00-03-00.10.mp4",
+                    time_window: "00:01:23.54 → 00:03:00.10",
+                    specialty: "General Surgery",
+                    procedure: "Cholecystectomy",
+                    question: "Which ordering best reflects when these events occurred during the procedure? A:\'An impacted stone is removed and set aside.\', B:\'The cystic duct is secured with an endo-loop.\', C:\'The body of the gallbladder is freed from the liver fossa.\'",
+                    answer: "C,A,B",
+                    options: [],
+                    transcript: "[0:01:23 → 0:01:27] Here you can see that the body of the gallbladder has been freed from the liver fossa.\n[0:01:28 → 0:01:32] The cholecystostomy tube should not be removed until you are sure you will not need a cholangiogram.\n[0:01:33 → 0:01:39] Adequate liver retraction is crucial to exposing the cystic structures, and additional ports may be necessary.\n[0:01:40 → 0:01:54] In difficult cases, transection of the gallbladder and interior visualization of the infundibulum can help identify the extent of dissection necessary to isolate the cystic duct without leaving remnant gallbladder behind.\n[0:01:56 → 0:01:59] In this case, I transect the gallbladder at the neck.\n[0:02:01 → 0:02:05] Opening the gallbladder further exposes an impacted stone.\n[0:02:07 → 0:02:10] The stone is removed and set off to the side for later retrieval.\n[0:02:12 → 0:02:18] After residual debris is cleaned out, the interior view shows the infundibulum narrowing into the cystic duct.\n[0:02:19 → 0:02:23] Surrounding tissue can then be dissected off of the cystic duct.\n[0:02:24 → 0:02:36] Lateral retraction and careful dissection is important during this portion of the operation to avoid inadvertent injury to portal structures that may be adherent to the gallbladder or in the setting of a short cystic duct.\n[0:02:37 → 0:02:47] Also, be aware that when performing a top-down cholecystectomy, the cystic artery is frequently divided at its terminal branches and may not always be clearly identified.\n[0:02:49 → 0:02:55] In this case, a small defect is made in the cystic duct as it is being cleared of overlying tissue.\n[0:02:55 → 0:03:00] Fortunately, there is enough length to safely secure the duct with an endo-loop."
+                },
+{
+                    video: "videos/e9e662830540c02ebd56030946608745_temporal_ordering_00-07-45.149_00-12-39.088.mp4",
+                    time_window: "00:07:45.149 → 00:12:39.088",
+                    specialty: "General Surgery",
+                    procedure: "Cholecystectomy",
+                    question: "Which ordering best reflects when these three events occur in the procedure? A: The Maryland dissector is used to enlarge the anterior window, B: The posterior peritoneum over the cystic pedicle is opened, C: The inferior surface of the liver becomes clearly visible within the field",
+                    answer: "B,C,A",
+                    options: [],
+                    transcript: "[0:07:45 → 0:07:48] There will be anteromedial traction.\n[0:07:48 → 0:07:51] And then you can open the posterior peritoneum.\n[0:07:52 → 0:07:59] This is the posterior peritoneum which can be opened at the level above the Rouviere\'s sulcus.\n[0:08:00 → 0:08:03] And you can separate the one third of the gallbladder.\n[0:08:07 → 0:08:19] Little more adhesion in these areas with the liver will be separated so that it will be easy for you to do the posterior peritoneum dissection.\n[0:08:19 → 0:08:21] This is the stomach.\n[0:08:21 → 0:08:24] Stomach is also mobilized further down.\n[0:08:28 → 0:08:30] And then here is the posterior peritoneum.\n[0:08:30 → 0:08:37] Again dissection of posterior peritoneum is started by giving anteromedial traction.\n[0:08:38 → 0:08:45] Here it is very difficult to give the anteromedial traction because entire gallbladder was impacted with the stone.\n[0:08:45 → 0:08:46] So just you can lift it.\n[0:08:47 → 0:08:53] And then slowly this is the peritoneum in between the gallbladder and the liver.\n[0:08:54 → 0:08:58] And anteromedial traction is given and this peritoneum is separated.\n[0:09:22 → 0:09:51] so anteromedial traction is given and posterior peritoneum is separated above the Rouviere\'s sulcus and now the traction will be anterolateral and again anterior side you will separate the peritoneum and separate one third of the gallbladder body of the gallbladder peritoneum and again slowly go down and that will give you the posterior window\n[0:09:52 → 0:09:57] After that streaming of the peritoneum of the cystic pedicle will be carried out.\n[0:09:58 → 0:10:01] That will give you anterior window.\n[0:10:02 → 0:10:08] So after making posterior and anterior window, then only Calot\'s triangle can be defined.\n[0:10:11 → 0:10:19] So at this point you should give anterolateral traction and inferior surface of the liver is visible.\n[0:10:20 → 0:10:28] As you know in the Calot\'s triangle of laparoscopic cholecystectomy, one of the boundary is the inferior surface of liver.\n[0:10:30 → 0:10:35] Now again the cystic pedicle, peritoneum over the cystic pedicle will be also separated.\n[0:11:09 → 0:11:14] So this is the entire skeletonization.\n[0:11:14 → 0:11:25] Below you can see the CBD and we are at the level of the cystic duct and the peritoneum around the cystic pedicle is separated to skeletonize the cystic duct and cystic artery.\n[0:11:54 → 0:12:02] So as we can see this is now the anterior window will be formed and all the peritoneum over the cystic pedicle is separated.\n[0:12:03 → 0:12:12] Now you can remove the harmonic and you can bring the Maryland, Maryland is a good beautiful instrument to make the anterior window.\n[0:12:14 → 0:12:39] so this is the harmonic now harmonic will be separated although the all the peritoneum is a skeletonized with the harmonic that is visceral peritoneum over the structure of the cystic pedicle now this is the Maryland you can put the Maryland and enlarge the anterior window by opening the jaw of the Maryland"
+                },
+{
+                    video: "videos/wShNaAQvL4Q_temporal_ordering_00-01-58.83_00-03-28.09.mp4",
+                    time_window: "00:01:58.83 → 00:03:28.09",
+                    specialty: "Colorectal",
+                    procedure: "Subtotal Colectomy",
+                    question: "Determine the correct temporal ordering of these procedural moments: A: The specimen is placed into the rectal stump and extraction begins with push–pull maneuvers, B: The rectal stump is cross-stapled, C: Specimen extraction is completed",
+                    answer: "A,C,B",
+                    options: [],
+                    transcript: "[0:01:58 → 0:02:09] The specimen can now be inserted into the rectal stump and extracted using a combination of pushing from above and pulling from below by a second operator.\n[0:02:11 → 0:02:22] Note how the majority of the specimen in this example has been extracted, but gaseous cecal distention makes the extraction difficult.\n[0:02:34 → 0:02:39] The surgeon makes an incision in the partially extracted specimen high up near the anal canal.\n[0:02:47 → 0:02:51] This then allows the surgeon to insert a flatus tube into the specimen.\n[0:02:55 → 0:02:59] The specimen is deflated and can be extracted completely.\n[0:03:23 → 0:03:28] Lastly, the rectal stump is cross-stapled and an ileostomy is performed."
+                },
+{
+                    video: "videos/a2e2729d940477dad12089c6c84f6602_temporal_ordering_00-10-14.00_00-11-15.00.mp4",
+                    time_window: "00:10:14.00 → 00:11:15.00",
+                    specialty: "Bariatrics",
+                    procedure: "Duodenal Switch",
+                    question: "Determine the timeline of these steps within the case: A:\'A side-to-side stapled enteroenterostomy is created between the limbs.\' B:\'The Roux limb is run backward to locate alignment clips.\' C:\'A mesenteric window is made in the biliopancreatic limb and it is transected with a white-load stapler.\'",
+                    answer: "C,B,A",
+                    options: [],
+                    transcript: "[0:10:14 → 0:10:24] Once the anastomosis is completed, a window is created in the mesentery of the biliopancreatic limb and a white load, sixty millimeter SureForm stapler is used to transect it.\n[0:10:24 → 0:10:30] And then we run the roux limb backwards to find our clips.\n[0:10:31 → 0:10:33] And here are the clips where the bowel is lined.\n[0:10:34 → 0:10:44] This Vicryl suture is then used to line up the biliopancreatic limb and the common channel or the alimentary limb so we can create our enteroenterostomy.\n[0:10:46 → 0:10:52] Again, I found that scissors create much smaller enterotomies and much more precise enterotomies.\n[0:10:54 → 0:11:00] Here we\'re going to create a side-to-side, sixty millimeter enteroenterostomy.\n[0:11:05 → 0:11:15] If you\'ve noticed throughout the case, the assistants basically will suction minimally and for the most part, that eight millimeter trocar is only really used to introduce sutures."
+                }
+            ]
+        },
+
+        "Forecasting": {
+            description: "Questions requiring prediction of upcoming surgical steps with reasoning.",
+            examples: [
+                {
+                    video: "videos/2e2490e62e610c31be76d3e8e2ff36a0_forecast_cot_00-03-05.539_00-04-21.900.mp4",
+                    time_window: "00:03:05.539 → 00:04:21.900",
+                    specialty: "Urology",
+                    procedure: "Prostatectomy - Radical w/ Lymphadenectomy",
+                    question: "Given the intraoperative context shown, what would be the expected next procedural action?",
+                    answer: "Place a suture to control the dorsal venous complex",
+                    options: [{ letter: "A", text: "Place a suture to control the dorsal venous complex", correct: true }, { letter: "B", text: "Begin the first layer of posterior reconstruction by suturing the posterior fascia to the sphincter", correct: false }, { letter: "C", text: "Begin the vesicourethral anastomosis by starting the posterior wall with a double-arm running suture", correct: false }, { letter: "D", text: "Release the ProGrasp providing cephalad retraction on the bladder", correct: false }, { letter: "E", text: "Advance the dissection along the lateral pelvic fascia", correct: false }, { letter: "F", text: "Perform intraoperative endoscopic evaluation to confirm intraoperative anatomy", correct: false }, { letter: "G", text: "Conduct an intraoperative assessment to confirm the integrity of the repair", correct: false }],
+                    transcript: "[0:03:05 → 0:03:08] You can see again a combination of sharp and blunt dissection.\n[0:03:09 → 0:03:13] Diathermy is used sparingly but it is used to gain access through the endopelvic fascia.\n[0:03:14 → 0:03:18] Those levator ani fibers are again reflected off the prostate.\n[0:03:19 → 0:03:26] Any little perforating bleeders such as this one from the levator ani can be cauterized with simple bipolar diathermy.\n[0:03:27 → 0:03:36] Again the puboprostatic ligament here on the patient\'s left hand side is divided in its superficial component but the urethral aspect of it is left in place.\n[0:03:37 → 0:03:44] We then release the ProGrasp which is providing cephalad retraction on the bladder.\n[0:03:45 → 0:03:55] The cut edges of the reflected endopelvic fascia over the prostate are secured in the midline and this really facilitates control of the dorsal venous complex.\n[0:03:56 → 0:04:22] we have an 0 PDS here on a semicircular needle which is then passed through the notch between the urethra and the DVC and it\'s brought through onto the contralateral side you know you\'re in the right place because when you pull the suture through there is no bleeding this suture can then be secured on the preserved urethral component of that"
+                },
+{
+                    video: "videos/e3515e1a30e0cb1119f42794180604ea_forecast_cot_00-03-02.722_00-03-15.330.mp4",
+                    time_window: "00:03:02.722 → 00:03:15.330",
+                    specialty: "General Surgery",
+                    procedure: "Esophagectomy Non-Transthoracic - Transhiatal",
+                    question: "Considering the surgical progress up to this point, what is the next step the team is likely to take?",
+                    answer: "Close the esophagojejunostomy site with running sutures",
+                    options: [{ letter: "A", text: "Perform a side-to-side jejunojejunostomy to restore downstream continuity", correct: false }, { letter: "B", text: "Perform a pyloroplasty", correct: false }, { letter: "C", text: "Transect the proximal esophagus in the neck incision", correct: false }, { letter: "D", text: "Close the esophagojejunostomy site with running sutures", correct: true }, { letter: "E", text: "Advance the gastric conduit into the chest", correct: false }, { letter: "F", text: "Continue mediastinal dissection around the esophagus", correct: false }, { letter: "G", text: "Add reinforcing sutures along the staple line of the esophagojejunostomy", correct: false }],
+                    transcript: "[0:03:02 → 0:03:04] An enterotomy performed.\n[0:03:06 → 0:03:09] An esophagotomy performed over a .\n[0:03:09 → 0:03:15] And with the aid of the blue cartridge in a stapler, a side-to-side esophago-jejunostomy is performed."
+                },
+{
+                    video: "videos/9c702efd59ac59ac881992a98177bfee_forecast_cot_00-04-00.63_00-04-29.97.mp4",
+                    time_window: "00:04:00.63 → 00:04:29.97",
+                    specialty: "General Surgery",
+                    procedure: "Pancreatectomy - Total",
+                    question: "Considering the surgical progress up to this point, what is the next step the team is likely to take?",
+                    answer: "Place a stent in the bile duct",
+                    options: [{ letter: "A", text: "Transect the splenic artery with a vascular stapler", correct: false }, { letter: "B", text: "Perform a cholangiogram to assess bile duct patency", correct: false }, { letter: "C", text: "Complete the posterior row suturing of the anastomosis", correct: false }, { letter: "D", text: "Place a stent in the bile duct", correct: true }, { letter: "E", text: "Begin the anterior row of the pancreaticojejunostomy", correct: false }, { letter: "F", text: "Bring the jejunum through the mesocolon defect", correct: false }, { letter: "G", text: "Complete the reconstruction of the biliary tract", correct: false }],
+                    transcript: "[0:04:00 → 0:04:06] The inferior pancreaticoduodenal artery was then reinforced using 5-0 Prolene sutures.\n[0:04:10 → 0:04:13] The jejunum was brought through a defect in the right mesocolon.\n[0:04:13 → 0:04:18] An end-to-side hepaticojejunostomy was then performed in a running fashion."
+                },
+{
+                    video: "videos/6a033f444dce6c9134e5bcb21006fc68_forecast_cot_00-19-10.487_00-25-15.000.mp4",
+                    time_window: "00:19:10.487 → 00:25:15.000",
+                    specialty: "Urology",
+                    procedure: "Prostatectomy - Radical w/o Lymphadenectomy",
+                    question: "Given the intraoperative context shown, what would be the expected next procedural action?",
+                    answer: "Initiate nerve-sparing dissection along the prostate",
+                    options: [{ letter: "A", text: "Initiate nerve-sparing dissection along the prostate", correct: true }, { letter: "B", text: "Perform an intraoperative integrity assessment", correct: false }, { letter: "C", text: "Perform intraoperative imaging to delineate the neurovascular plane", correct: false }, { letter: "D", text: "Perform intraoperative endoscopic assessment", correct: false }, { letter: "E", text: "Begin urethrovesical anastomosis with interrupted sutures", correct: false }, { letter: "F", text: "Perform posterior reconstruction of the bladder neck", correct: false }, { letter: "G", text: "Begin dissection of the posterior bladder neck to facilitate exposure", correct: false }],
+                    transcript: "[0:19:10 → 0:19:13] At this point you can see that we\'ve started the bladder dissection.\n[0:19:14 → 0:19:16] We have not taken the dorsal vein complex yet.\n[0:19:17 → 0:19:29] Decided that there\'s a lot of surrounding tissue around the dorsal vein that I want to try to preserve if possible because the neurovascular bundle, the vascular\n[0:19:31 → 0:19:35] portion of the neurovascular bundle can sometimes come up very close to the dorsal vein complex.\n[0:19:36 → 0:19:52] So here I feel comfortable that if there is any bleeding we\'ll be able to stop it and you\'ll find that the back bleeding is not as bad as it would be in open surgery if we don\'t have early control of the dorsal vein complex.\n[0:20:17 → 0:20:23] We\'ve exposed the Foley catheter and the fourth arm comes into play with\n[0:20:26 → 0:20:31] holding the Foley catheter up and hugging the sidewall of the pelvis.\n[0:20:32 → 0:20:37] People ask, do you think the size of the bladder neck makes a difference for continence?\n[0:20:38 → 0:20:44] There\'s really no muscle here that I think will help with continence.\n[0:20:45 → 0:20:49] So a patient who has a large bladder neck still has a good chance of\n[0:20:55 → 0:21:04] bladder neck as small, therefore it\'s manageable to perform the anastomosis quickly and also it\'s less likely to have a leak.\n[0:22:15 → 0:22:35] Having proctored dozens and dozens of surgeons for performing this case, I think the bladder neck dissection, especially the posterior bladder neck dissection, often presents challenges for surgeons because there aren\'t as many visual cues that you can use to tell you if you\'re proceeding properly.\n[0:22:35 → 0:22:41] This is one of the reasons why I really like the posterior approach to the seminal vesicles first.\n[0:22:41 → 0:22:46] That way, as you go through, the only thing that you\'ll run into is an empty space.\n[0:22:46 → 0:22:48] The chance of a rectal injury is very small.\n[0:22:49 → 0:22:55] The other challenge is maintaining a proper thickness of the bladder posteriorly.\n[0:22:57 → 0:22:59] A thin posterior wall\n[0:23:01 → 0:23:02] can set you up for problems.\n[0:23:02 → 0:23:15] I think number one, the ureteral orifices sometimes can be close, so you have to be careful not to back wall into the trigone and the ureters in that area.\n[0:23:16 → 0:23:23] The other issue is that there can be some denervation where the patients then have problems with their urinary function.\n[0:23:24 → 0:23:26] Once you get into a splash of\n[0:23:27 → 0:23:40] usually watery type bleeding, you know that you\'ve kind of connected the dots, so to speak, between the first portion of her surgery and now the, and this portion.\n[0:23:42 → 0:23:54] If the case is going and you\'re noticing there\'s a lot of bleeding that appears to be coming from the prostate, that means you\'re probably too close and you want to reassess by looking at your posterior bladder neck\n[0:23:56 → 0:23:59] and likely moving further away from the prostate\n[0:24:01 → 0:24:08] And you can see here we\'ve actually did have a little bit of bleeding, maybe not from prostate, but from tissue very close to it.\n[0:24:09 → 0:24:16] And so we readjusted and moved a little further down and that exposed the vas and some of the vesicles as you can now see.\n[0:24:16 → 0:24:28] The assistant comes in with the suction to make sure that the posterior bladder wall continues to stay on traction and we\'re able to expose some of the vesicles and vas quickly.\n[0:24:29 → 0:24:33] This is another good reason why I like to have the fourth arm on the right side.\n[0:24:33 → 0:24:39] We can grasp with both hands, which is important at times.\n[0:24:40 → 0:24:49] For example, here and then also at times where we have unexpected bleeding, having two graspers can sometimes be very helpful."
+                }
+            ]
+        },
+
+        "Action Description": {
+            description: "Questions asking the viewer to describe the surgical actions taking place in the video segment.",
+            examples: [
+                {
+                    video: "videos/YK9f4XilkwI_action_description_00-01-35.66_00-01-37.44.mp4",
+                    time_window: "00:01:35.66 → 00:01:37.44",
+                    specialty: "General Surgery",
+                    procedure: "Liver Resection",
+                    question: "What is the surgeon doing in this segment?",
+                    answer: "Opening the triangular ligament",
+                    options: [{ letter: "A", text: "Performing a peritoneotomy", correct: false }, { letter: "B", text: "Opening the triangular ligament", correct: true }, { letter: "C", text: "Performing a liver biopsy", correct: false }, { letter: "D", text: "Clipping and dividing an arterial branch", correct: false }, { letter: "E", text: "Performing a hepatic vein reconstruction", correct: false }, { letter: "F", text: "Performing intraoperative ultrasound examination", correct: false }, { letter: "G", text: "Retracting the left liver lobe", correct: false }],
+                    transcript: "[0:01:35 → 0:01:37] The triangular ligament is opened."
+                },
+{
+                    video: "videos/20ada07d5504e68d018386d47dd0843e_action_description_00-01-43.63_00-01-47.15.mp4",
+                    time_window: "00:01:43.63 → 00:01:47.15",
+                    specialty: "General Surgery",
+                    procedure: "Cholecystectomy",
+                    question: "What is the surgeon doing in this segment?",
+                    answer: "Applying clips to the cystic duct",
+                    options: [{ letter: "A", text: "Applying clips to the cystic artery", correct: false }, { letter: "B", text: "Applying clips to the cystic duct", correct: true }, { letter: "C", text: "Inspecting the operative bed", correct: false }, { letter: "D", text: "Evaluating the gallbladder for signs of inflammation", correct: false }, { letter: "E", text: "Performing a circumferential dissection around the gallbladder", correct: false }, { letter: "F", text: "Inspecting the surgical field for bleeding", correct: false }, { letter: "G", text: "Inspecting the cystic duct for anatomical variations", correct: false }],
+                    transcript: "[0:01:43 → 0:01:47] Clipping is done three times, two on the proximal and one more to the distal."
+                },
+{
+                    video: "videos/a4b04b0a7d21bd19937a2e6df5a044c4_action_description_00-18-53.189_00-19-01.855.mp4",
+                    time_window: "00:18:53.189 → 00:19:01.855",
+                    specialty: "Urology",
+                    procedure: "Prostatectomy - Radical w/ Lymphadenectomy",
+                    question: "Which action best describes what is happening here?",
+                    answer: "Opening the endopelvic fascia",
+                    options: [{ letter: "A", text: "Incising the posterior urethral plate", correct: false }, { letter: "B", text: "Applying a clip to a small vessel", correct: false }, { letter: "C", text: "Dissecting the anterior plane of the bladder", correct: false }, { letter: "D", text: "Retracting tissue using the suction instrument", correct: false }, { letter: "E", text: "Transecting the vas deferens", correct: false }, { letter: "F", text: "Opening the endopelvic fascia", correct: true }, { letter: "G", text: "Dissecting the Retzius space", correct: false }],
+                    transcript: "[0:18:53 → 0:18:55] So here, obviously, we\'re just opening the endopelvic fascia.\n[0:18:56 → 0:18:58] And, you know, I routinely do this.\n[0:18:58 → 0:19:00] I know some people don\'t routinely open the endopelvic fascia.\n[0:19:00 → 0:19:01] They kind of skip this step."
+                },
+{
+                    video: "videos/94ff8cba4a6c25adf826058491cfe0d5_action_description_00-25-22_328_00-25-24_690.mp4",
+                    time_window: "00:25:22,328 → 00:25:24,690",
+                    specialty: "General Surgery",
+                    procedure: "Ventral Hernia TAPP",
+                    question: "At this moment, what is being done?",
+                    answer: "Placing the final sutures to close the peritoneal flap",
+                    options: [{ letter: "A", text: "Inspecting the operative bed", correct: false }, { letter: "B", text: "Performing a final check for hemostasis", correct: false }, { letter: "C", text: "Tightening the sutures to secure the flap in place", correct: false }, { letter: "D", text: "Placing the final sutures to close the peritoneal flap", correct: true }, { letter: "E", text: "Taking down the umbilical ligaments", correct: false }, { letter: "F", text: "Reducing the pneumoperitoneum pressure", correct: false }, { letter: "G", text: "Securing the mesh with additional sutures", correct: false }],
+                    transcript: "[0:25:22 → 0:25:24] So these are the last few bites which are taken."
+                }
+            ]
+        },
+
+        "Entity Existence": {
+            description: "Questions about whether specific objects, instruments, or structures are present in the scene.",
+            examples: [
+                {
+                    video: "videos/1BPsQmeQuSc_object_existence_00-07-30.49_00-07-40.89.mp4",
+                    time_window: "00:07:30.49 → 00:07:40.89",
+                    specialty: "General Surgery",
+                    procedure: "Heller Myotomy",
+                    question: "While securing the fundal patch, which diaphragmatic structure is seen in this segment?",
+                    answer: "Medial crus of the diaphragm",
+                    options: [{ letter: "A", text: "Left crus of the diaphragm", correct: false }, { letter: "B", text: "Medial crus of the diaphragm", correct: true }, { letter: "C", text: "Peritoneal reflection", correct: false }, { letter: "D", text: "Posterior crura of the diaphragm", correct: false }, { letter: "E", text: "Right crus of the diaphragm", correct: false }, { letter: "F", text: "Fibrous portion of the diaphragm", correct: false }, { letter: "G", text: "Diaphragmatic crura", correct: false }],
+                    transcript: "[0:07:30 → 0:07:40] To fix the gastric fundal patch, we take not only the medial cut edge of the esophagus, but also the medial crus of the diaphragm."
+                },
+{
+                    video: "videos/ff3d158ceed6c4cf904d129834a90dc0_object_existence_00-02-16.33_00-02-22.00.mp4",
+                    time_window: "00:02:16.33 → 00:02:22.00",
+                    specialty: "General Surgery",
+                    procedure: "Appendectomy",
+                    question: "Which anatomical landmark is visualized during alignment before transection in this segment?",
+                    answer: "Ileocecal valve",
+                    options: [{ letter: "A", text: "Edge of the mesenteric window", correct: false }, { letter: "B", text: "Terminal ileum", correct: false }, { letter: "C", text: "Inferior border of the duodenum", correct: false }, { letter: "D", text: "Inferior border of the cecal base", correct: false }, { letter: "E", text: "Superior mesenteric vein", correct: false }, { letter: "F", text: "Ileocecal valve", correct: true }, { letter: "G", text: "Appendiceal base", correct: false }],
+                    transcript: "[0:02:16 → 0:02:22] I\'m making sure I\'m not encroaching upon the lumen of the ileocecal valve."
+                },
+{
+                    video: "videos/wGCkcQPdO_Q_object_existence_00-02-54.07_00-02-58.70.mp4",
+                    time_window: "00:02:54.07 → 00:02:58.70",
+                    specialty: "Other",
+                    procedure: "Other",
+                    question: "In the superficial drainage portion of the procedure, what pathological space is present?",
+                    answer: "Perianal abscess",
+                    options: [{ letter: "A", text: "Anorectal ring", correct: false }, { letter: "B", text: "Perforating vessel", correct: false }, { letter: "C", text: "Perianal abscess", correct: true }, { letter: "D", text: "Perineal skin", correct: false }, { letter: "E", text: "Perineal abscess", correct: false }, { letter: "F", text: "Perirectal space", correct: false }, { letter: "G", text: "Supralevator space", correct: false }],
+                    transcript: "[0:02:54 → 0:02:58] In this case, a true perianal abscess is drained and is therefore very superficial."
+                },
+{
+                    video: "videos/6a033f444dce6c9134e5bcb21006fc68_object_existence_00-08-13_169_00-08-18.290.mp4",
+                    time_window: "00:08:13,169 → 00:08:18.290",
+                    specialty: "Urology",
+                    procedure: "Prostatectomy - Radical w/o Lymphadenectomy",
+                    question: "At this stage of posterior pelvic dissection, which tissue plane is identified in this segment?",
+                    answer: "Denonvilliers\' fascia",
+                    options: [{ letter: "A", text: "Seminal vesicle", correct: false }, { letter: "B", text: "Periosteum of the pubic symphysis", correct: false }, { letter: "C", text: "Rectovaginal space", correct: false }, { letter: "D", text: "Retroperitoneal plane", correct: false }, { letter: "E", text: "Pelvic floor", correct: false }, { letter: "F", text: "Seminal vesicles", correct: false }, { letter: "G", text: "Denonvilliers\' fascia", correct: true }],
+                    transcript: "[0:08:13 → 0:08:18] At this stage, you can see the dissection through Denonvilliers\' fascia.\n[0:08:18 → 0:08:22] We\'ve lifted both seminal vesicles up into the air to provide exposure."
+                }
+            ]
+        },
+
+        "Safety Practice Description": {
+            description: "Questions about assessing safety concerns, risks, and adherence to safe surgical practices.",
+            examples: [
+                {
+                    video: "videos/ktvVvPHpbn4_safety_00-01-54.11_00-02-01.76.mp4",
+                    time_window: "00:01:54.11 → 00:02:01.76",
+                    specialty: "Colorectal",
+                    procedure: "Ileocolic Resection",
+                    question: "What precautionary action is shown in this segment?",
+                    answer: "Applying multiple energy seals with the LigaSure before dividing to prevent bleeding",
+                    options: [{ letter: "A", text: "Momentarily pausing to visually confirm the LigaSure is set to the correct energy level", correct: false }, { letter: "B", text: "Ensuring adequate exposure of the pedicle before applying energy", correct: false }, { letter: "C", text: "Applying gentle traction to the mesentery to facilitate dissection", correct: false }, { letter: "D", text: "Applying multiple energy seals with the LigaSure before dividing to prevent bleeding", correct: true }, { letter: "E", text: "Retracting the duodenum inferiorly to maintain a safe distance from the dissection plane", correct: false }, { letter: "F", text: "Retracting the LigaSure tip slightly to ensure a safe distance from the duodenum", correct: false }, { letter: "G", text: "Identifying and protecting the right ureter to avoid thermal injury during pedicle dissection", correct: false }],
+                    transcript: "[0:01:54 → 0:02:01] Again, just because it\'s difficult to reach up and grasp things, if things were to bleed, I triple burn that just for security.\n[0:02:01 → 0:02:07] Do a little bit of medial to lateral dissection out underneath the mesentery."
+                },
+{
+                    video: "videos/BvutK-6q5BI_safety_00-02-24.02_00-02-36.41.mp4",
+                    time_window: "00:02:24.02 → 00:02:36.41",
+                    specialty: "General Surgery",
+                    procedure: "Cholecystectomy",
+                    question: "In this segment, how is injury to nearby portal structures being avoided?",
+                    answer: "Applying lateral retraction while performing cautious dissection around the cystic duct",
+                    options: [{ letter: "A", text: "Applying lateral retraction while performing cautious dissection around the cystic duct", correct: true }, { letter: "B", text: "Keeping the energy device directed away from the common bile duct during dissection", correct: false }, { letter: "C", text: "Gently sweeping the surrounding tissue posteriorly to keep it out of the dissection field", correct: false }, { letter: "D", text: "Maintaining the dissection plane away from the common hepatic duct to prevent injury", correct: false }, { letter: "E", text: "Identifying the cystic artery early to prevent inadvertent clipping of the common bile duct", correct: false }, { letter: "F", text: "Using controlled, gentle traction to mobilize the cystic duct off the gallbladder wall", correct: false }, { letter: "G", text: "Carefully isolating and preserving the cystic artery to avoid injury during dissection", correct: false }],
+                    transcript: "[0:02:24 → 0:02:36] Lateral retraction and careful dissection is important during this portion of the operation to avoid inadvertent injury to portal structures that may be adherent to the gallbladder or in the setting of a short cystic duct."
+                },
+{
+                    video: "videos/515b675f7ec23ab934548bf5cc9badfb_safety_00-15-52.31_00-16-05.88.mp4",
+                    time_window: "00:15:52.31 → 00:16:05.88",
+                    specialty: "Thoracic",
+                    procedure: "Esophagectomy Transthoracic - Neck Anastomosis",
+                    question: "What step is being performed to reduce the risk of tracheal injury in this scene?",
+                    answer: "Gentle, controlled dissection directly over the membranous trachea",
+                    options: [{ letter: "A", text: "Carefully mobilizing the esophagus to the right to increase separation from the trachea before dissecting", correct: false }, { letter: "B", text: "Maintaining gentle traction on the esophagus to keep it away from the dissection plane and reduce the risk of injury", correct: false }, { letter: "C", text: "Gentle, controlled dissection directly over the membranous trachea", correct: true }, { letter: "D", text: "Applying gentle counter-traction to the esophagus to minimize stress on the airway", correct: false }, { letter: "E", text: "Gently retracting the lung tissue to improve visualization of the esophagus and trachea during dissection", correct: false }, { letter: "F", text: "Employing minimal traction on the esophagus to reduce the risk of tracheal damage", correct: false }, { letter: "G", text: "Identifying the bronchial arteries to avoid inadvertent transection during lymph node dissection", correct: false }],
+                    transcript: "[0:15:52 → 0:15:58] Careful dissection is done over membranous trachea to avoid any form of iatrogenic injury.\n[0:16:01 → 0:16:05] Upper thoracic paraesophageal lymph node that is station 105 is resected out."
+                },
+{
+                    video: "videos/vifsQFfxu9o_safety_00-07-24.44_00-07-44.24.mp4",
+                    time_window: "00:07:24.44 → 00:07:44.24",
+                    specialty: "General Surgery",
+                    procedure: "Cholecystectomy",
+                    question: "Which safety-focused vascular control is visible here?",
+                    answer: "Applying clips to a small arterial branch before dividing it to ensure hemostasis",
+                    options: [{ letter: "A", text: "Maintaining clear visualization using suction irrigation during dissection", correct: false }, { letter: "B", text: "Displaying the critical view of safety with the liver bed visible behind the isolated cystic duct and artery", correct: false }, { letter: "C", text: "Demonstrating the critical view of safety with the cystic duct and artery clearly isolated and the liver bed visible behind the triangle", correct: false }, { letter: "D", text: "Carefully dissecting around Calot\'s triangle to avoid injury", correct: false }, { letter: "E", text: "Demonstrating the critical view of safety with the cystic duct and artery clearly isolated and the gallbladder partially separated from its bed", correct: false }, { letter: "F", text: "Applying clips to a small arterial branch before dividing it to ensure hemostasis", correct: true }, { letter: "G", text: "Applying vascular clamps to the cystic artery to obtain bleeding control before transecting the vessel", correct: false }],
+                    transcript: "[0:07:24 → 0:07:31] And here we\'ve identified a branch of the cystic artery, and we\'re clipping this using the Hem-o-lok clips.\n[0:07:31 → 0:07:35] And then we\'re going to divide that branch of the artery with the harmonic scalpel.\n[0:07:35 → 0:07:44] Again, the goal here is to try to maintain careful hemostasis in this very friable, very inflamed, very bloody gallbladder."
+                }
+            ]
+        },
+
+        "Instrument–Action Interaction": {
+            description: "Questions about how specific surgical instruments are being used and their interaction with tissue.",
+            examples: [
+                {
+                    video: "videos/14c541c7aeaefbe526e0b8bfeebc897b_instrument_action_interaction_00-01-55.09_00-02-04.44.mp4",
+                    time_window: "00:01:55.09 → 00:02:04.44",
+                    specialty: "General Surgery",
+                    procedure: "Cholecystectomy",
+                    question: "Within this segment, what action is performed by the Maryland?",
+                    answer: "Dissect to create a window in Calot\'s triangle",
+                    options: [{ letter: "A", text: "Dissect to create a window in Calot\'s triangle", correct: true }, { letter: "B", text: "Mobilize the posterior aspect of the gallbladder", correct: false }, { letter: "C", text: "Mobilize the right lobe from the diaphragm and retroperitoneum", correct: false }, { letter: "D", text: "Maryland bipolar grasper", correct: false }, { letter: "E", text: "Dissect Calot\'s triangle", correct: false }, { letter: "F", text: "Maryland dissectors", correct: false }, { letter: "G", text: "Maryland grasper", correct: false }],
+                    transcript: "[0:01:55 → 0:02:04] To make a window we generally prefer the Maryland because it is more smooth and it can open and dissect the posterior anterior window."
+                },
+{
+                    video: "videos/a2e2729d940477dad12089c6c84f6602_instrument_action_interaction_00-10-34.00_00-10-44.51.mp4",
+                    time_window: "00:10:34.00 → 00:10:44.51",
+                    specialty: "Bariatrics",
+                    procedure: "Duodenal Switch",
+                    question: "What action is performed by the Vicryl suture in this clip?",
+                    answer: "Align the biliopancreatic limb with the common channel",
+                    options: [{ letter: "A", text: "Secure the sutures in place", correct: false }, { letter: "B", text: "Suture the inner layer in a continuous fashion", correct: false }, { letter: "C", text: "Secure the loop in position", correct: false }, { letter: "D", text: "Create an enterotomy in the alimentary limb", correct: false }, { letter: "E", text: "Divide the epiploic branches along the greater curvature", correct: false }, { letter: "F", text: "Pass a Vicryl suture to close the enteroenterostomy", correct: false }, { letter: "G", text: "Align the biliopancreatic limb with the common channel", correct: true }],
+                    transcript: "[0:10:34 → 0:10:44] This Vicryl suture is then used to line up the biliopancreatic limb and the common channel or the alimentary limb so we can create our enteroenterostomy."
+                },
+{
+                    video: "videos/0e9b1b0fdf876c7226899d0ceade019b_instrument_action_interaction_00-02-09.53_00-02-23.51.mp4",
+                    time_window: "00:02:09.53 → 00:02:23.51",
+                    specialty: "Urology",
+                    procedure: "Prostatectomy - Simple Transvesical",
+                    question: "What instrument is used to place a retraction suture through the prostatic adenoma in this segment?",
+                    answer: "CT-1 needle",
+                    options: [{ letter: "A", text: "CT-1 needle", correct: true }, { letter: "B", text: "Weck clip", correct: false }, { letter: "C", text: "Endoscopic suture device", correct: false }, { letter: "D", text: "CT-2 needle", correct: false }, { letter: "E", text: "ProGrasp", correct: false }, { letter: "F", text: "RB-1 needle", correct: false }, { letter: "G", text: "CT-2 needle with a Weck clip", correct: false }],
+                    transcript: "[0:02:09 → 0:02:23] An additional two-oh Vicryl and CT one needle with a Weck clip at the end is then placed through the prostatic adenoma at the inferior position, taking care to avoid the ureteral orifices."
+                },
+{
+                    video: "videos/25d2fa5da69936e58957cd1db73aee05_instrument_action_interaction_00-05-49.002_00-05-56.568.mp4",
+                    time_window: "00:05:49.002 → 00:05:56.568",
+                    specialty: "General Surgery",
+                    procedure: "Pancreatoduodenectomy",
+                    question: "What instrument is used to place the corner sutures in this segment?",
+                    answer: "4-0 Vicryl sutures",
+                    options: [{ letter: "A", text: "Suture the posterior layer with a continuous stitch", correct: false }, { letter: "B", text: "Run a continuous suture from the corner to the inferior edge", correct: false }, { letter: "C", text: "4-0 PDS sutures", correct: false }, { letter: "D", text: "4-0 Vicryl sutures", correct: true }, { letter: "E", text: "Place running sutures on the anastomosis", correct: false }, { letter: "F", text: "Suture the exterior of the anastomosis", correct: false }, { letter: "G", text: "4-0 Prolene suture", correct: false }],
+                    transcript: "[0:05:49 → 0:05:55] mucosa and then inside the pancreatic duct out towards the pancreas.\n[0:05:56 → 0:06:03] These sutures will be the last to be tied after the anterior row is completed and tied as well."
+                }
+            ]
+        },
+
+        "Entity Attribute": {
+            description: "Questions about the visual properties and characteristics of objects in the surgical field.",
+            examples: [
+                {
+                    video: "videos/tKdsWmg9YY0_object_attribute_00-06-45.55_00-06-49.93.mp4",
+                    time_window: "00:06:45.55 → 00:06:49.93",
+                    specialty: "Gynecology",
+                    procedure: "Lymphadenectomy",
+                    question: "What is the condition of the vaginal vault at completion of closure?",
+                    answer: "Vault edges approximated and closed with a continuous barbed suture",
+                    options: [{ letter: "A", text: "The vaginal wall is clearly identified but shows a small defect", correct: false }, { letter: "B", text: "The vaginal opening is closed with continuous non-barbed sutures", correct: false }, { letter: "C", text: "The vaginal mucosa is closed with braided silk sutures", correct: false }, { letter: "D", text: "Edges are approximated and secured with sutures", correct: false }, { letter: "E", text: "The vaginal vault is closed without defects", correct: false }, { letter: "F", text: "The vaginal wall is closed with interrupted non-absorbable sutures, with the peritoneal sac elevated and separated", correct: false }, { letter: "G", text: "Vault edges approximated and closed with a continuous barbed suture", correct: true }],
+                    transcript: "[0:06:45 → 0:06:49] Then we proceed with the vault closure using three-zero V-Loc suture."
+                },
+{
+                    video: "videos/vifsQFfxu9o_object_attribute_00-08-40.32_00-08-44.20.mp4",
+                    time_window: "00:08:40.32 → 00:08:44.20",
+                    specialty: "General Surgery",
+                    procedure: "Cholecystectomy",
+                    question: "How does Hartmann’s pouch appear at this time?",
+                    answer: "Partially visible, beginning to become evident",
+                    options: [{ letter: "A", text: "Breached, with a visible opening in the wall", correct: false }, { letter: "B", text: "Not delineated; the structure is not visualized", correct: false }, { letter: "C", text: "It appears as a loose, floppy 180-degree wrap", correct: false }, { letter: "D", text: "The sac appears thickened and fibrotic", correct: false }, { letter: "E", text: "It appears somewhat edematous.", correct: false }, { letter: "F", text: "The pouch is partially visualized.", correct: false }, { letter: "G", text: "Partially visible, beginning to become evident", correct: true }],
+                    transcript: "[0:08:40 → 0:08:44] As we work toward the base, we can see Hartmann\'s pouch beginning to become evident."
+                },
+{
+                    video: "videos/a721bdd70aa06ab874af9717cdc239f0_object_attribute_00-05-15.440_00-05-21.724.mp4",
+                    time_window: "00:05:15.440 → 00:05:21.724",
+                    specialty: "Urology",
+                    procedure: "Partial Nephrectomy",
+                    question: "What is the state of the previously clamped arterial branches during early unclamping?",
+                    answer: "Bulldog clamps have been removed and the branches are reperfused",
+                    options: [{ letter: "A", text: "Bulldog clamps have been removed and the branches are reperfused", correct: true }, { letter: "B", text: "The bleeding surface is compressed and coated with a gelatinous thrombin matrix with visibly diminished bleeding.", correct: false }, { letter: "C", text: "A small arterial branch is intact and not yet controlled.", correct: false }, { letter: "D", text: "Blanched and pale, consistent with ischemia.", correct: false }, { letter: "E", text: "The clamps are removed; the hilum is unclamped", correct: false }, { letter: "F", text: "Stapled arterial stumps that are dry and hemostatic.", correct: false }, { letter: "G", text: "The renal vessels are unclamped; clamps have been removed", correct: false }],
+                    transcript: "[0:05:15 → 0:05:18] After the first suture is finished, we attempt an early unclamping."
+                },
+{
+                    video: "videos/7KUhqu9xHNs_object_attribute_00-12-30.22_00-12-36.10.mp4",
+                    time_window: "00:12:30.22 → 00:12:36.10",
+                    specialty: "General Surgery",
+                    procedure: "Incisional Hernia TAPP",
+                    question: "How does the mesh’s position appear before desufflation?",
+                    answer: "The mesh appears well positioned and secure",
+                    options: [{ letter: "A", text: "The mesh lies in direct contact with the obturator nerve", correct: false }, { letter: "B", text: "The mesh extends to and covers the obturator space", correct: false }, { letter: "C", text: "The mesh is positioned within the retromuscular space for coverage", correct: false }, { letter: "D", text: "The mesh appears well positioned and secure", correct: true }, { letter: "E", text: "A small portion of the mesh edge is visible beyond the flap", correct: false }, { letter: "F", text: "The mesh lies flat and is well-apposed to the posterior rectus sheath", correct: false }, { letter: "G", text: "The mesh lies slightly shifted to the right side", correct: false }],
+                    transcript: "[0:12:30 → 0:12:36] But in this case, I felt the mesh was very well positioned and secure, so I didn\'t evacuate the pocket."
+                }
+            ]
+        },
+
+        "Procedure-Agnostic Action Description": {
+            description: "Questions describing surgical actions without relying on procedure-specific terminology.",
+            examples: [
+                {
+                    video: "videos/DmVcyLRsSNc_pa_action_description_00-05-45.97_00-05-56.04.mp4",
+                    time_window: "00:05:45.97 → 00:05:56.04",
+                    specialty: "General Surgery",
+                    procedure: "Inguinal Hernia - Unilateral",
+                    question: "Which common operative action is occurring at this moment?",
+                    answer: "Dissecting",
+                    options: [{ letter: "A", text: "Inspecting anatomy", correct: false }, { letter: "B", text: "Stabilizing", correct: false }, { letter: "C", text: "Applying traction", correct: false }, { letter: "D", text: "Mobilizing tissue", correct: false }, { letter: "E", text: "Applying counter-traction", correct: false }, { letter: "F", text: "Dissecting", correct: true }, { letter: "G", text: "Coagulating bleeding sites", correct: false }],
+                    transcript: "[0:05:45 → 0:05:56] So, this is usually my strategy when there\'s a lot of bleeding, is go to the side where there\'s no blood, and then find the right plane, and then move towards the pool of blood."
+                },
+{
+                    video: "videos/PedHBrcnw2Q_pa_action_description_00-01-08.98_00-01-12.74.mp4",
+                    time_window: "00:01:08.98 → 00:01:12.74",
+                    specialty: "Colorectal",
+                    procedure: "Transanal Local Excision",
+                    question: "Which procedure-agnostic surgical action is being performed in this clip?",
+                    answer: "Tissue retraction",
+                    options: [{ letter: "A", text: "Mobilizing tissue", correct: false }, { letter: "B", text: "Harvesting the specimen", correct: false }, { letter: "C", text: "Dissecting", correct: false }, { letter: "D", text: "Clipping", correct: false }, { letter: "E", text: "Applying hemostasis", correct: false }, { letter: "F", text: "Aspirating", correct: false }, { letter: "G", text: "Tissue retraction", correct: true }],
+                    transcript: "[0:01:08 → 0:01:12] Countertraction was applied by the assistant with laparoscopic instruments."
+                },
+{
+                    video: "videos/7ofDa73q00g_pa_action_description_00-03-48.20_00-03-53.58.mp4",
+                    time_window: "00:03:48.20 → 00:03:53.58",
+                    specialty: "Colorectal",
+                    procedure: "Low Anterior Resection (LAR)",
+                    question: "What generic surgical action is shown here?",
+                    answer: "Mobilizing tissue",
+                    options: [{ letter: "A", text: "Transecting", correct: false }, { letter: "B", text: "Transposing the rectal segment", correct: false }, { letter: "C", text: "Mobilizing tissue", correct: true }, { letter: "D", text: "Tissue detachment", correct: false }, { letter: "E", text: "Retracting tissue", correct: false }, { letter: "F", text: "Coagulating", correct: false }, { letter: "G", text: "Ligating", correct: false }],
+                    transcript: "[0:03:48 → 0:03:51] And now I\'ll go ahead and mobilize the left side of the rectum.\n[0:03:51 → 0:03:53] I\'ve already done this part of the dissection on the right."
+                },
+{
+                    video: "videos/2e2490e62e610c31be76d3e8e2ff36a0_pa_action_description_00-03-37_800_00-03-45.385.mp4",
+                    time_window: "00:03:37,800 → 00:03:45.385",
+                    specialty: "Urology",
+                    procedure: "Prostatectomy - Radical w/ Lymphadenectomy",
+                    question: "What generic surgical action is shown here?",
+                    answer: "Releasing retraction",
+                    options: [{ letter: "A", text: "Ligating", correct: false }, { letter: "B", text: "Releasing retraction", correct: true }, { letter: "C", text: "Suturing", correct: false }, { letter: "D", text: "Retracting structures", correct: false }, { letter: "E", text: "Tissue mobilization", correct: false }, { letter: "F", text: "Elevating structures", correct: false }, { letter: "G", text: "Coagulating", correct: false }],
+                    transcript: "[0:03:37 → 0:03:44] We then release the ProGrasp which is providing cephalad retraction on the bladder.\n[0:03:45 → 0:03:55] The cut edges of the reflected endopelvic fascia over the prostate are secured in the midline and this really facilitates control of the dorsal venous complex."
+                }
+            ]
+        },
+
+        "Sequence Summarization": {
+            description: "Questions asking for a summary of the sequence of events in the video segment.",
+            examples: [
+                {
+                    video: "videos/A5BF1_Vy9YY_sequence_summarization_00-00-55.29_00-01-26.16.mp4",
+                    time_window: "00:00:55.29 → 00:01:26.16",
+                    specialty: "Colorectal",
+                    procedure: "Transanal Total Mesorectal Excision",
+                    question: "What sequence of procedural steps is performed to achieve central ligation of the inferior mesenteric artery at its origin in this operation?",
+                    answer: "First, the sigmoid colon is mobilized off the left abdominal wall; then the sigmoid mesentery is mobilized via a medial approach to expose the vascular pedicle; finally, the inferior mesenteric artery is ligated at its origin.",
+                    options: [],
+                    transcript: "[0:00:55 → 0:01:00] First, the sigmoid colon was mobilized from left abdominal wall.\n[0:01:07 → 0:01:11] Then the sigmoid mesentery was mobilized via a medial approach.\n[0:01:22 → 0:01:26] inferior mesenteric artery was ligated at the origin."
+                },
+{
+                    video: "videos/d6ad72150263a0f0b8eff493c49c6ce1_sequence_summarization_00-03-59.827_00-05-01.140.mp4",
+                    time_window: "00:03:59.827 → 00:05:01.140",
+                    specialty: "Urology",
+                    procedure: "Partial Nephrectomy",
+                    question: "How is a bloodless field achieved for tumor resection in this hybrid partial nephrectomy?",
+                    answer: "Incise peritumoral Gerota’s fascia and fat to delineate the exophytic tumor; further skeletonize the renal artery and vein; loop the artery and vein with vessel loops; dock the Da Vinci SI robot; apply robotic bulldog clamps to the renal artery and then the vein to secure hilar control; proceed to resect the tumor in the resulting bloodless field.",
+                    options: [],
+                    transcript: "[0:03:59 → 0:04:10] Peritumoral Gerota\'s fascia and fat was incised till the renal capsule using hook cautery and an exophytic tumor was delineated.\n[0:04:24 → 0:04:29] The renal artery is dissected further with skeletonized with blunt and sharp dissection.\n[0:04:32 → 0:04:42] At this time the assistant is asked to get ready with SI robot which was meanwhile being used to perform a robotic prostatectomy in parallel operating room.\n[0:04:43 → 0:04:50] Renal artery and vein were looped with vessel loops separately and Da Vinci SI robot was docked in.\n[0:04:50 → 0:04:56] The Scanlan, a robotic bulldog clamps were used to clamp the renal artery and vein separately.\n[0:04:58 → 0:05:01] Tumor was resected in a bloodless field."
+                },
+{
+                    video: "videos/addbe74c1c19dfd9fd3db58861e82b25_sequence_summarization_00-08-15.24_00-11-37.67.mp4",
+                    time_window: "00:08:15.24 → 00:11:37.67",
+                    specialty: "General Surgery",
+                    procedure: "Cholecystectomy - Pediatric",
+                    question: "What sequence of operative steps is followed to detach the gallbladder from the liver bed and extract it?",
+                    answer: "After vascular and ductal control, anteromedial and anterior traction is applied with the micro instrument while the energy device is kept oriented toward the liver to protect the gallbladder. Dissection proceeds along the correct subserosal plane, with intermittent blunt dissection to define the avascular plane. Retraction is adjusted to optimize exposure, and the fundus is freed last. The area beneath the gallbladder is inspected to confirm a dry field before completing separation. The neck of the gallbladder is then guided into the cannula and the specimen is progressively delivered. If stones impede extraction, they are crushed and removed to facilitate removal of the gallbladder through the port.",
+                    options: [],
+                    transcript: "[0:08:15 → 0:08:18] So now it is separated and then you can separate the gallbladder.\n[0:08:18 → 0:08:24] To separate the gallbladder with the left hand we have to do anteromedial anterolateral traction.\n[0:08:24 → 0:08:41] Here because we don\'t have any third or fourth instrument and as we know Stryker Mini Alligator cannot be repeatedly opened and again rearranged so you have to be little compromise and anteromedial anterior traction has to be given carefully.\n[0:08:42 → 0:09:11] the another problem that if you are using micro instrument then in those situation you have to be little gentle because it can puncture it also so here we are using the micro instrument and that is percutaneous instrument so you have to hold it in a way that you can manage it here light cable is kept at six o\'clock position and slowly the a good aerial plane has to be achieved and gallbladder can be separated from the liver\n[0:09:12 → 0:09:23] During that separation you should keep the teflon or silicon jaw of the harmonic towards the liver so that it will not puncture because vibration will not be transferred towards the liver.\n[0:09:33 → 0:09:39] Little blunt dissection time to time is useful which will make you a plane of dissection to separate.\n[0:09:51 → 0:10:18] now it is rearranged Stryker Mini Alligator is rearranged so that the traction can be minimized and then the final part of the fundus of the gallbladder has to be separated so ergonomically if you will reduce the number of the ports little bit difficulty will be there but it can be managed easily\n[0:10:19 → 0:10:24] and the patient has less pain, early recovery, no scar also is observed.\n[0:10:25 → 0:10:28] In my opinion, two port cholecystectomy is better than single incision.\n[0:10:29 → 0:10:41] Now this is final part, but before taking the final part of the fundus of the gallbladder out, one exposure below is good to have so that you can see that if it is everything is fine.\n[0:10:42 → 0:10:44] And we are just inspecting below now.\n[0:10:45 → 0:11:04] so it is right now the light cable was down now it is up and no blood everything is clear and dry and then you can separate the final part of the gallbladder so this is the way how the cholecystectomy can be done only by two ports and one percutaneously\n[0:11:05 → 0:11:19] needle instrument that is a Stryker Mini Alligator now you can hold it by cloth or sip and put the neck of the gallbladder into the cannula and slowly the entire gallbladder will be taken out\n[0:11:20 → 0:11:37] During taking this out, you have to be careful that if there is a packed stone, there are multiple stones in this small child, and there is ovum forceps, with the ovum forceps, for multiple times you can crush and take all the stones out, and then gallbladder can be taken out."
+                },
+{
+                    video: "videos/ae01b93bed1fb2e3c8185821112bff8d_sequence_summarization_00-02-31.355_00-04-58.110.mp4",
+                    time_window: "00:02:31.355 → 00:04:58.110",
+                    specialty: "Urology",
+                    procedure: "Prostatectomy - Radical w/o Lymphadenectomy",
+                    question: "Outline the operative steps used to identify and manage the seminal vesicles and vasa to facilitate prostate removal.",
+                    answer: "The posterior dissection is first performed in a standard manner. Bilateral vasa are identified, and the seminal vesicles are dissected up to the posterior bladder neck. Following bladder neck division, the vasa and seminal vesicles are delivered to complete posterior mobilization, and the sequence culminates with clipping and division of the lateral pedicles to enable removal.",
+                    options: [],
+                    transcript: "[0:02:31 → 0:02:36] Bilateral vas were identified and seminal vesicles were dissected till posterior bladder neck.\n[0:02:41 → 0:02:46] Bladder drop was started from the left side to avoid injury to the transplant kidney and ureter.\n[0:02:47 → 0:02:53] Peritoneum incised lateral to the medial umbilical ligament and further Retzius space developed.\n[0:03:15 → 0:03:19] Right sided drop was done very carefully to safeguard the transplant ureter.\n[0:03:20 → 0:03:25] Perivesical fat was denser on the right side so the dissection was a bit slower.\n[0:03:27 → 0:03:29] Only a limited bladder drop was done on the right side.\n[0:03:57 → 0:04:00] Dissection lateral to the prostate was done in a standard manner.\n[0:04:10 → 0:04:15] Dissection near the transplant ureter was very careful with preservation of periureteric soft tissue.\n[0:04:28 → 0:04:58] bilateral endopelvic fascia were exposed and incised anterior bladder neck was divided catheter was delivered and posterior bladder neck division completed bilateral vas and seminal vesicles were delivered and lateral pedicles were clipped and divided"
+                }
+            ]
+        }
+    };
+
+    const typeKeys = Object.keys(DATA);
+    let totalExamples = 0;
+    typeKeys.forEach(k => totalExamples += DATA[k].examples.length);
+
+    document.getElementById('stat-examples').textContent = totalExamples;
+    document.getElementById('stat-types').textContent = typeKeys.length;
+
+    // Build tabs
+    const tabsContainer = document.getElementById('type-tabs');
+    typeKeys.forEach((type, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'type-btn' + (i === 0 ? ' active' : '');
+        btn.innerHTML = `${type}<span class="count">${DATA[type].examples.length}</span>`;
+        btn.dataset.type = type;
+        btn.addEventListener('click', () => switchTab(type));
+        tabsContainer.appendChild(btn);
+    });
+
+    // Build sections with 2x2 grid
+    const root = document.getElementById('examples-root');
+    typeKeys.forEach((type, i) => {
+        const section = document.createElement('div');
+        section.className = 'type-section' + (i === 0 ? ' active' : '');
+        section.id = 'section-' + slugify(type);
+
+        let html = `<p class="type-description">${DATA[type].description}</p>`;
+        html += '<div class="examples-grid">';
+        DATA[type].examples.forEach((ex, j) => { html += renderCard(ex, j + 1); });
+        html += '</div>';
+
+        section.innerHTML = html;
+        root.appendChild(section);
+    });
+
+    // Attach transcript toggles
+    document.querySelectorAll('.transcript-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const content = btn.nextElementSibling;
+            const isOpen = content.classList.toggle('open');
+            btn.textContent = isOpen ? '\u25BE Hide transcript' : '\u25B8 Show transcript';
+        });
+    });
+
+    function switchTab(type) {
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector(`.type-btn[data-type="${type}"]`).classList.add('active');
+        document.querySelectorAll('.type-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('section-' + slugify(type)).classList.add('active');
+        const activeBtn = document.querySelector(`.type-btn[data-type="${type}"]`);
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    function slugify(str) {
+        return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    }
+
+    function renderCard(ex, num) {
+        // Two-column options with checkmark on correct
+        let optionsHtml = '';
+        if (ex.options && ex.options.length > 0) {
+            optionsHtml = '<div class="options-grid">';
+            ex.options.forEach(o => {
+                optionsHtml += `
+                    <div class="option-item ${o.correct ? 'correct' : ''}">
+                        <span class="option-letter">${o.letter}.</span>
+                        <span>${o.text}</span>
+                        ${o.correct ? '<span class="option-check">\u2713</span>' : ''}
+                    </div>`;
+            });
+            optionsHtml += '</div>';
+        }
+
+        // Collapsible transcript
+        let transcriptHtml = '';
+        if (ex.transcript) {
+            const formatted = ex.transcript
+                .replace(/\[([^\]]+)\]/g, '<span class="transcript-ts">[$1]</span>')
+                .replace(/\n/g, '<br>');
+            transcriptHtml = `
+            <button class="transcript-toggle">\u25B8 Show transcript</button>
+            <div class="transcript-content">${formatted}</div>`;
+        }
+
+        return `
+        <div class="example-card">
+            <div class="card-header">
+                <span class="card-number">Example ${num}</span>
+                <div class="card-tags">
+                    ${ex.specialty ? `<span class="card-tag specialty">${ex.specialty}</span>` : ''}
+                    ${ex.procedure ? `<span class="card-tag procedure">${ex.procedure}</span>` : ''}
+                    <span class="card-time">${ex.time_window}</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="video-wrapper">
+                    <video controls autoplay muted loop playsinline preload="auto">
+                        <source src="${ex.video}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="qa-block question">
+                    <div class="qa-label">Question</div>
+                    <div class="qa-text">${ex.question}</div>
+                    ${optionsHtml}
+                </div>
+                <div class="qa-block answer">
+                    <div class="qa-label">Answer</div>
+                    <div class="qa-text">${ex.answer}</div>
+                </div>
+                ${transcriptHtml}
+            </div>
+        </div>`;
+    }
+    </script>
+</body>
+</html>
